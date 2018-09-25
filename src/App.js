@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import * as dashboardAction from './actions/dashboardAction';
 
 class App extends Component {
   render() {
@@ -18,4 +21,15 @@ class App extends Component {
   }
 }
 
-export default App;
+function mapStateToProps(state, props){
+  console.log('+++', state);
+  return {}
+}
+
+function mapDispatchToProps(dispatch){
+  return {
+    action : bindActionCreators(dashboardAction, dispatch)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
