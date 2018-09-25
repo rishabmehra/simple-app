@@ -1,0 +1,1 @@
+export const PROJECT_DETAILS_URL = 'https://api.proworkflow.net/projects?apikey=VE4J-DTOL-GB9N-GPB9-PWFISMQ-DEV3572&_=1537894104266'

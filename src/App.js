@@ -6,6 +6,13 @@ import { connect } from 'react-redux';
 import * as dashboardAction from './actions/dashboardAction';
 
 class App extends Component {
+  constructor(props){
+    super(props);
+  }
+  getProjectDetails(){
+    console.log('in getProjectDetails');
+    this.props.action.getProjectDetails();
+  }
   render() {
     return (
       <div className="App">
@@ -14,7 +21,7 @@ class App extends Component {
           <h1 className="App-title">Welcome to React</h1>
         </header>
         <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
+          <button onClick={()=>this.getProjectDetails()}>Test API calls</button>
         </p>
       </div>
     );

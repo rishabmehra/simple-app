@@ -1,3 +1,11 @@
+import * as ActionConstants from '../actions/actionTypes';
+
 export default(state = { list : []}, action) => {
-   return state;
+    switch(action.type) {
+        case ActionConstants.GET_PROJECT_DETAILS_SUCCESS:
+        return {...state, list : action.payload };
+
+        default:
+        return state;
+    }
 }
