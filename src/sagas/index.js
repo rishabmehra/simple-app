@@ -1,18 +1,17 @@
 import { put, takeLatest, all } from 'redux-saga/effects';
 import * as ActionConstants from '../actions/actionTypes';
-import { PROJECT_DETAILS_URL } from '../constants/constants';
-import { hashHistory } from 'react-router';
+import { PROJECT_DETAILS_URL, API_KEY, BASIC_URL,PROJECT_DETAILS_FIELDS,BASE_PATH,API_KEY_AUTHORIZATION } from '../constants/constants';
 
 /*
 Sagas for fetching projectDetails
 */
 function* fetchProjectDetails() {
     console.log('in fetchProjectDetails');
-    const apiResponse = yield fetch(PROJECT_DETAILS_URL,{
+    const apiResponse = yield fetch(`${BASE_PATH}?apiKey=${API_KEY}&${PROJECT_DETAILS_FIELDS}`,{
         method : 'GET',
         headers: {
            'Content-Type': 'application/json',
-           'Authorization' : 'Basic ZzFrSmZTazczaGo6dUg4M005cUs3MTNiY3pEMTg='
+           'Authorization' : API_KEY_AUTHORIZATION
         },
     }).then(response => response.json());
     console.log('apiResponse',apiResponse);
@@ -24,11 +23,11 @@ Sagas for fetching projectDetails w.r,t to project ID
 */
 function* fetchSearchProjectDetails(action){
     const projectID = action.projectID;
-    const searchResponse = yield fetch(`https://api.proworkflow.net/projects/${projectID}?apikey=VE4J-DTOL-GB9N-GPB9-PWFISMQ-DEV3572&_=1537980667340`,{
+    const searchResponse = yield fetch(`${BASE_PATH}/${projectID}?apikey=${API_KEY}`,{
         method : 'GET',
         headers: {
            'Content-Type': 'application/json',
-           'Authorization' : 'Basic ZzFrSmZTazczaGo6dUg4M005cUs3MTNiY3pEMTg='
+           'Authorization' : API_KEY_AUTHORIZATION
         },
     }).then(response => response.json());
     console.log('searchResponse',searchResponse);
@@ -42,16 +41,13 @@ function* getLoginDetails(action){
     console.log('getLoginDetails sagas', action);
     const apiKey =  action.apiKey;
     try{
-        const loginResponse = yield fetch(`https://api.proworkflow.net/login?apikey=${apiKey}`,{
+        const loginResponse = yield fetch(`${BASE_PATH}/login?apikey=${apiKey}`,{
             method : 'GET',
             headers: {
                'Content-Type': 'application/json',
-               'Authorization' : 'Basic ZzFrSmZTazczaGo6dUg4M005cUs3MTNiY3pEMTg='
+               'Authorization' : API_KEY_AUTHORIZATION
             },
         }).then(response => response.json());
-        if(loginResponse.count > 0){
-            hashHistory.push('/http://localhost:3000/dashboard');
-        }
         console.log('loginResponse',loginResponse);
         yield put({type : ActionConstants.GET_LOGIN_SUCCESS, isError : false})
     }catch(err){

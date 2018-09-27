@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import * as dashboardAction from '../actions/dashboardAction';
 import ProjectDetails from '../components/ProjectDetails';
 import Input from '../components/common/Input';
+import { Redirect } from 'react-router-dom';
 
 class Dashboard extends Component {
   constructor(props){
@@ -17,21 +18,29 @@ class Dashboard extends Component {
       projectID : ''
     }
   }
-
+/*
+* handleSearch to get the project Id
+*/
   handleSearch(e){
-    console.log(e.target.value);
     this.setState({ projectID : e.target.value})
   }
 
+/*
+* will load the project details from API
+*/
   componentDidMount(){
     this.props.action.getProjectDetails();
   }
-
+/*
+* Reset the component and call the project details API
+*/
   resetProjectDetails(){
     this.props.action.getProjectDetails();
     this.setState({ projectID : ''})
   }
-
+/*
+* call the search details action w.r.t projectID
+*/
   getSearchDetails(){
     const { projectID } = this.state;
     this.props.action.getSearchDetails(projectID);
@@ -39,6 +48,10 @@ class Dashboard extends Component {
   
   render() {
     const { projectList } = this.props;
+    const { isAuthenticated } = this.props.isLogin;
+    if(!isAuthenticated){
+      return <Redirect to='/login' />;
+    }
     return (
       <div className="App">
         <header className="App-header">
@@ -46,9 +59,9 @@ class Dashboard extends Component {
           <h1 className="App-title">Welcome to React</h1>
         </header>
         <p className="App-intro">
-          <Input type="text" placeholder="Search Book" onChange={this.handleSearch} />
-          <button onClick={this.getSearchDetails}>Search</button>
-          <button onClick={this.resetProjectDetails}>Reset</button>
+          <Input type="text" className="dashboard-input" placeholder="Search Book" onChange={this.handleSearch} />
+          <button onClick={this.getSearchDetails} className="dashboard-search-button">Search</button>
+          <button onClick={this.resetProjectDetails} className="dashboard-reset-button">Reset</button>
         </p>
         {
           projectList.map((item,index) => {
@@ -64,9 +77,9 @@ class Dashboard extends Component {
 }
 
 function mapStateToProps(state, props){
-  console.log('+++', state);
   return {
-    projectList : state.dashboardReducer.list
+    projectList : state.dashboardReducer.list,
+    isLogin : state.loginReducer
   }
 }
 

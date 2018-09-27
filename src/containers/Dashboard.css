@@ -22,13 +22,57 @@
   font-size: large;
 }
 
-.projectContainer{
+.project-container{
   border : 1px solid black;
-  height : 110px;
+  height : 160px;
   position:relative;
   margin-bottom : 11px;
 }
 
+.dashboard-input{
+  width: 192px;
+  height: 32px;
+  margin-bottom: 25px;
+  padding-left:10px;
+  font-size: 15px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.dashboard-search-button{
+  width: 88px;
+  height: 34px;
+  font-size: 20px;
+  background: #f0776c;
+  border: 0;
+  border-radius: 5px;
+  cursor: pointer; 
+  outline:0;
+  margin-left: 15px;
+}
+
+.dashboard-reset-button{
+   width: 88px;
+  height: 34px;
+  font-size: 20px;
+  background: #a8a5a5;
+  border: 0;
+  border-radius: 5px;
+  cursor: pointer; 
+  outline:0;
+  margin-left: 15px;
+}
+
+.project-label{
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.project-text{
+  font-size: 17px;
+  font-family: serif;
+}
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }

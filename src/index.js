@@ -12,11 +12,14 @@ import rootReducers from './reducers';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Login from './containers/login';
 
+ // imported saga middleware
 const sagaMiddleware = createSagaMiddleware();
+// creating the redux store instance
 const store = createStore(
     rootReducers,
    applyMiddleware(sagaMiddleware, logger),
 );
+// bind rootSaga file with saga middleware
 sagaMiddleware.run(rootSaga);
 
 ReactDOM.render(
