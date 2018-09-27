@@ -31,7 +31,7 @@ class Login extends Component {
     return (
       <div className="App">
           <div className="login">
-             <h1 className="login-title">Simple Login</h1>
+             <h1 className="login-title">Simple App Login</h1>
              <Input type="text" className="login-input" placeholder="Please enter API key" onChange={this.onChangeHandler} />
              { isErrorMessage ? (<div className="login-error-message">Please provide valid API key</div>) : ''}
              <button className="login-button" onClick={()=>this.submitLoginDetails()}> Submit </button>
