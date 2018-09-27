@@ -5,3 +5,10 @@ export const getProjectDetails = () =>{
         type : ActionConstants.GET_PROJECT_DETAILS
     }
 }
+
+export const getSearchDetails = (projectID) => {
+    return {
+        type : ActionConstants.GET_SEARCH_PROJECT_DETAILS,
+        projectID
+    }
+}

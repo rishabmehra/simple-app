@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import Dashboard from './containers/Dashboard';
 import registerServiceWorker from './registerServiceWorker';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
@@ -9,6 +9,8 @@ import createSagaMiddleware from 'redux-saga';
 import { logger } from 'redux-logger';
 import rootSaga from './sagas';
 import rootReducers from './reducers';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import Login from './containers/login';
 
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(
@@ -19,7 +21,12 @@ sagaMiddleware.run(rootSaga);
 
 ReactDOM.render(
 <Provider store={store}>
-  <App />
+ <Router>
+   <div>
+    <Route exact path="/dashboard" component={Dashboard} />
+    <Route path="/login" component={Login} />
+   </div>  
+ </Router>  
 </Provider>
 , document.getElementById('root'));
 registerServiceWorker();

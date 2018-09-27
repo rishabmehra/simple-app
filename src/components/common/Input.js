@@ -4,12 +4,13 @@ import PropTypes from 'prop-types';
 class Input extends React.Component {
     
     render(){
-        const {type, placeholder, onChange} = this.props;
+        const {type, placeholder, onChange, className} = this.props;
         return(
             <input
              type={type}
              onChange={onChange}
              placeholder={placeholder}
+             className={className}
              />
         );
     }
@@ -22,6 +23,7 @@ Input.propTypes = {
 
 Input.defaultProps = {
     type : 'text',
-    placeholder : 'Type here'  
+    placeholder : 'Type here',
+    className : ''  
 }
 export default Input
