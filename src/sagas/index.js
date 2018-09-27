@@ -1,21 +1,23 @@
 import { put, takeLatest, all } from 'redux-saga/effects';
 import * as ActionConstants from '../actions/actionTypes';
-import { PROJECT_DETAILS_URL, API_KEY, BASIC_URL,PROJECT_DETAILS_FIELDS,BASE_PATH,API_KEY_AUTHORIZATION } from '../constants/constants';
+import { API_KEY, PROJECT_DETAILS_FIELDS,BASE_PATH,API_KEY_AUTHORIZATION } from '../constants/constants';
 
 /*
 Sagas for fetching projectDetails
 */
 function* fetchProjectDetails() {
-    console.log('in fetchProjectDetails');
-    const apiResponse = yield fetch(`${BASE_PATH}?apiKey=${API_KEY}&${PROJECT_DETAILS_FIELDS}`,{
-        method : 'GET',
-        headers: {
-           'Content-Type': 'application/json',
-           'Authorization' : API_KEY_AUTHORIZATION
-        },
-    }).then(response => response.json());
-    console.log('apiResponse',apiResponse);
-    yield put({ type : ActionConstants.GET_PROJECT_DETAILS_SUCCESS, payload : apiResponse.projects});
+    try{
+        const apiResponse = yield fetch(`${BASE_PATH}/projects?apiKey=${API_KEY}&${PROJECT_DETAILS_FIELDS}`,{
+            method : 'GET',
+            headers: {
+               'Content-Type': 'application/json',
+               'Authorization' : API_KEY_AUTHORIZATION
+            },
+        }).then(response => response.json());
+        yield put({ type : ActionConstants.GET_PROJECT_DETAILS_SUCCESS, payload : apiResponse.projects});
+    }catch(err){
+        yield put({ type : ActionConstants.GET_PROJECT_DETAILS_FAILURE, payload : err});
+    }
 }
 
 /*
@@ -23,22 +25,24 @@ Sagas for fetching projectDetails w.r,t to project ID
 */
 function* fetchSearchProjectDetails(action){
     const projectID = action.projectID;
-    const searchResponse = yield fetch(`${BASE_PATH}/${projectID}?apikey=${API_KEY}`,{
-        method : 'GET',
-        headers: {
-           'Content-Type': 'application/json',
-           'Authorization' : API_KEY_AUTHORIZATION
-        },
-    }).then(response => response.json());
-    console.log('searchResponse',searchResponse);
-    yield put({ type : ActionConstants.GET_SEARCH_PROJECT_DETAILS_SUCCESS, payload : searchResponse.project})
+    try{
+        const searchResponse = yield fetch(`${BASE_PATH}/projects/${projectID}?apikey=${API_KEY}`,{
+            method : 'GET',
+            headers: {
+               'Content-Type': 'application/json',
+               'Authorization' : API_KEY_AUTHORIZATION
+            },
+        }).then(response => response.json());
+        yield put({ type : ActionConstants.GET_SEARCH_PROJECT_DETAILS_SUCCESS, payload : searchResponse.project})
+    }catch(err){
+        yield put({ type : ActionConstants.GET_SEARCH_PROJECT_DETAILS_SUCCESS, payload : err})
+    }  
 }
 
 /*
 Sagas for fetching loginDetails
 */
 function* getLoginDetails(action){
-    console.log('getLoginDetails sagas', action);
     const apiKey =  action.apiKey;
     try{
         const loginResponse = yield fetch(`${BASE_PATH}/login?apikey=${apiKey}`,{
@@ -48,10 +52,11 @@ function* getLoginDetails(action){
                'Authorization' : API_KEY_AUTHORIZATION
             },
         }).then(response => response.json());
-        console.log('loginResponse',loginResponse);
-        yield put({type : ActionConstants.GET_LOGIN_SUCCESS, isError : false})
+
+        if(loginResponse.status === 'Success')
+        yield put({type : ActionConstants.GET_LOGIN_SUCCESS, isError : false});
+        
     }catch(err){
-        console.log('Errrr', err);
         yield put({type : ActionConstants.GET_LOGIN_FAILURE, isError : true})
     }
 }

@@ -2,7 +2,7 @@
 * convert the date into DD-MM-YYYY format
 */
 export const getDate = (strDate) =>{
-    if(strDate == '' || strDate == null){
+    if(strDate === '' || strDate === null){
         return "Invalid Date"; 
     }
     var validDate = new Date(strDate);
@@ -13,7 +13,7 @@ export const getDate = (strDate) =>{
 * remove the unwanted html tags
 */
 export const removeHtmlTags = (str) =>{
-    if(str == '' || str == null){
+    if(str === '' || str === null){
         return ""; 
     }
     str = str.toString();

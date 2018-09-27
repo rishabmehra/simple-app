@@ -56,10 +56,10 @@ class Dashboard extends Component {
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
+          <h1 className="App-title">Welcome to React Simple Application</h1>
         </header>
         <p className="App-intro">
-          <Input type="text" className="dashboard-input" placeholder="Search Book" onChange={this.handleSearch} />
+          <Input type="text" className="dashboard-input" placeholder="Please enter project id" onChange={this.handleSearch} />
           <button onClick={this.getSearchDetails} className="dashboard-search-button">Search</button>
           <button onClick={this.resetProjectDetails} className="dashboard-reset-button">Reset</button>
         </p>
