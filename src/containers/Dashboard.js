@@ -1,85 +1,107 @@
 import React, { Component } from 'react';
-import logo from '../logo.svg';
 import './Dashboard.css';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as dashboardAction from '../actions/dashboardAction';
-import ProjectDetails from '../components/ProjectDetails';
-import Input from '../components/common/Input';
-import { Redirect } from 'react-router-dom';
+import Input from '../components/common/input/input';
+import Button from  '../components/common/knob/knob';
+import Weather from '../components/weather/weather';
+import { SEARCH, PLACEHOLDER } from '../utils/constants';
 
 class Dashboard extends Component {
   constructor(props){
     super(props);
-    this.handleSearch = this.handleSearch.bind(this);
-    this.getSearchDetails = this.getSearchDetails.bind(this);
-    this.resetProjectDetails = this.resetProjectDetails.bind(this);
+    this.searchHandler = this.searchHandler.bind(this);
+    this.getLocation = this.getLocation.bind(this);
+    this.getWeatherByLocation = this.getWeatherByLocation.bind(this)
     this.state = {
-      projectID : ''
+      list : '',
+      latitude:'',
+      longitude: '',
+      searchValue: ''
     }
   }
-/*
-* handleSearch to get the project Id
-*/
-  handleSearch(e){
-    this.setState({ projectID : e.target.value})
+
+  getLocation()  {
+    if (!navigator.geolocation) {
+      alert('Geolocation is not supported by your browser');
+    } else {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude
+        this.setState({latitude });
+        this.setState({ longitude });
+        this.props.action.loadWeatherDetails({ latitude, longitude})
+      }, () => {
+        alert('Unable to retrieve your location');
+      });
+    }
   }
 
-/*
-* will load the project details from API
-*/
-  componentDidMount(){
-    this.props.action.getProjectDetails();
+  componentDidMount () {
+    this.getLocation()
   }
-/*
-* Reset the component and call the project details API
-*/
-  resetProjectDetails(){
-    this.props.action.getProjectDetails();
-    this.setState({ projectID : ''})
+
+  searchHandler(e) {
+    console.log(e.target.value)
+    this.setState({searchValue : e.target.value})
   }
-/*
-* call the search details action w.r.t projectID
-*/
-  getSearchDetails(){
-    const { projectID } = this.state;
-    this.props.action.getSearchDetails(projectID);
+
+  getWeatherByLocation() {
+    const { searchValue } = this.state;
+    this.props.action.getWeatherDetailsByLocation(searchValue)
+  }
+
+  generateList() {
+    const { weatherList, city } = this.props;
+
+    if(weatherList && weatherList.length > 0) {
+      const list = weatherList.map((item,index) => {
+        return(
+          <Weather
+            id={item.dt}
+            key={index}
+            weather={item.weather}
+            main={item.main}
+            city={city}
+            time={item.dt_txt}
+          />
+        )
+      })
+      return list
+    }
   }
   
   render() {
-    const { projectList } = this.props;
-    const { isAuthenticated } = this.props.isLogin;
-    if(!isAuthenticated){
-      return <Redirect to='/login' />;
-    }
+    const { searchValue } = this.state;
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React Simple Application</h1>
-        </header>
-        <p className="App-intro">
-          <Input type="text" className="dashboard-input" placeholder="Please enter project id" onChange={this.handleSearch} />
-          <button onClick={this.getSearchDetails} className="dashboard-search-button">Search</button>
-          <button onClick={this.resetProjectDetails} className="dashboard-reset-button">Reset</button>
-        </p>
-        {
-          projectList.map((item,index) => {
-            return(
-              <ProjectDetails data={item} key={index}/>
-            )
-          })
-        }
-       
+      <div className="card-container">
+      <div className="card-header">
+              <div className="cardHeader--search">
+              <div className="carHeader--search-input">
+                   <Input
+                    value={searchValue}
+                    onChangeHandler={this.searchHandler}
+                    label={PLACEHOLDER}
+                    />
+              </div>
+                 <div className="carHeader--search-button">
+                   <Button text={SEARCH} onClickHandler={this.getWeatherByLocation} />
+                 </div>
+             </div>
       </div>
+      <div className="card-layout">
+        {this.generateList()}
+      </div>
+    </div>
     );
   }
 }
 
 function mapStateToProps(state, props){
   return {
-    projectList : state.dashboardReducer.list,
-    isLogin : state.loginReducer
+    weatherList : state.dashboardReducer.list,
+    city: state.dashboardReducer.city
   }
 }
 

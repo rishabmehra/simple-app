@@ -1,79 +1,21 @@
-.App {
-  text-align: center;
+.card-layout {
+  grid-gap: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+.card-header {
+  display: flex;
+  justify-content: space-around;
+  margin: 20px;
 }
-
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+.cardHeader--search {
+  display: flex;
 }
-
-.App-title {
-  font-size: 1.5em;
+.carHeader--search-select {
+  margin-right: 20px;
 }
-
-.App-intro {
-  font-size: large;
-}
-
-.project-container{
-  border : 1px solid black;
-  height : 160px;
-  position:relative;
-  margin-bottom : 11px;
-}
-
-.dashboard-input{
-  width: 192px;
-  height: 32px;
-  margin-bottom: 25px;
-  padding-left:10px;
-  font-size: 15px;
-  background: #fff;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.dashboard-search-button{
-  width: 88px;
-  height: 34px;
-  font-size: 20px;
-  background: #f0776c;
-  border: 0;
-  border-radius: 5px;
-  cursor: pointer; 
-  outline:0;
+.carHeader--search-button {
+  padding-top: 10px;
   margin-left: 15px;
-}
-
-.dashboard-reset-button{
-   width: 88px;
-  height: 34px;
-  font-size: 20px;
-  background: #a8a5a5;
-  border: 0;
-  border-radius: 5px;
-  cursor: pointer; 
-  outline:0;
-  margin-left: 15px;
-}
-
-.project-label{
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.project-text{
-  font-size: 17px;
-  font-family: serif;
-}
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
 }

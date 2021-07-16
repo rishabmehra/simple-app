@@ -1,12 +1,12 @@
 import * as ActionConstants from '../actions/actionTypes';
 
-export default(state = { list : []}, action) => {
+export default(state = { list : [], city: {}}, action) => {
     switch(action.type) {
-        case ActionConstants.GET_PROJECT_DETAILS_SUCCESS:
-        return {...state, list : action.payload };
+        case ActionConstants.LOAD_WEATHER_SUCCESS:
+        return {...state, list : action.payload.list };
         
-        case ActionConstants.GET_SEARCH_PROJECT_DETAILS_SUCCESS:
-        return {...state, list : [action.payload] };
+        case ActionConstants.SET_CITY_NAME:
+        return {...state, city : action.payload };
         default:
         return state;
     }

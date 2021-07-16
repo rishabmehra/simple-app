@@ -10,7 +10,6 @@ import { logger } from 'redux-logger';
 import rootSaga from './sagas';
 import rootReducers from './reducers';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import Login from './containers/login';
 
  // imported saga middleware
 const sagaMiddleware = createSagaMiddleware();
@@ -27,7 +26,6 @@ ReactDOM.render(
  <Router>
    <div>
     <Route exact path="/dashboard" component={Dashboard} />
-    <Route path="/login" component={Login} />
    </div>  
  </Router>  
 </Provider>

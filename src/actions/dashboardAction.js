@@ -12,3 +12,17 @@ export const getSearchDetails = (projectID) => {
         projectID
     }
 }
+
+export const loadWeatherDetails = (payload) =>{
+    return {
+        type : ActionConstants.LOAD_WEATHER_LIST,
+        payload
+    }
+}
+
+export const getWeatherDetailsByLocation = (name) => {
+    return {
+        type : ActionConstants.GET_WEATHER_DETAILS_BY_LOCATION,
+        name
+    }
+}

@@ -1,72 +1,54 @@
 import { put, takeLatest, all } from 'redux-saga/effects';
 import * as ActionConstants from '../actions/actionTypes';
-import { API_KEY, PROJECT_DETAILS_FIELDS,BASE_PATH,API_KEY_AUTHORIZATION } from '../constants/constants';
+import { API_KEY, API_HOST, BASE_PATH } from '../constants/constants';
 
 /*
-Sagas for fetching projectDetails
+Sagas for fetching weather details
 */
-function* fetchProjectDetails() {
+function* loadWeatherDetails(action) {
+    const lat = action.payload.latitude;
+    const lon = action.payload.longitude
     try{
-        const apiResponse = yield fetch(`${BASE_PATH}/projects?apiKey=${API_KEY}&${PROJECT_DETAILS_FIELDS}`,{
+        const apiResponse = yield fetch(`${BASE_PATH}/forecast?lat=${lat}&lon=${lon}`,{
             method : 'GET',
             headers: {
-               'Content-Type': 'application/json',
-               'Authorization' : API_KEY_AUTHORIZATION
+                'x-rapidapi-key': API_KEY,
+                'x-rapidapi-host': API_HOST
             },
         }).then(response => response.json());
-        yield put({ type : ActionConstants.GET_PROJECT_DETAILS_SUCCESS, payload : apiResponse.projects});
+        yield put({ type : ActionConstants.LOAD_WEATHER_SUCCESS, payload : apiResponse});
+        yield put({ type : ActionConstants.SET_CITY_NAME, payload : apiResponse.city});
     }catch(err){
-        yield put({ type : ActionConstants.GET_PROJECT_DETAILS_FAILURE, payload : err});
+        yield put({ type : ActionConstants.LOAD_WEATHER_FAILURE, payload : err});
     }
 }
 
 /*
-Sagas for fetching projectDetails w.r,t to project ID
+Sagas for fetching weather details w.r.t location
 */
-function* fetchSearchProjectDetails(action){
-    const projectID = action.projectID;
+function* getWeatherDetailsByLocation(action) {
+    const name = action.name;
     try{
-        const searchResponse = yield fetch(`${BASE_PATH}/projects/${projectID}?apikey=${API_KEY}`,{
+        const apiResponse = yield fetch(`${BASE_PATH}/forecast?q=${name}`,{
             method : 'GET',
             headers: {
-               'Content-Type': 'application/json',
-               'Authorization' : API_KEY_AUTHORIZATION
+                'x-rapidapi-key': API_KEY,
+                'x-rapidapi-host': API_HOST
             },
         }).then(response => response.json());
-        yield put({ type : ActionConstants.GET_SEARCH_PROJECT_DETAILS_SUCCESS, payload : searchResponse.project})
+        yield put({ type : ActionConstants.LOAD_WEATHER_SUCCESS, payload : apiResponse});
+        yield put({ type : ActionConstants.SET_CITY_NAME, payload : apiResponse.city});
     }catch(err){
-        yield put({ type : ActionConstants.GET_SEARCH_PROJECT_DETAILS_SUCCESS, payload : err})
-    }  
-}
-
-/*
-Sagas for fetching loginDetails
-*/
-function* getLoginDetails(action){
-    const apiKey =  action.apiKey;
-    try{
-        const loginResponse = yield fetch(`${BASE_PATH}/login?apikey=${apiKey}`,{
-            method : 'GET',
-            headers: {
-               'Content-Type': 'application/json',
-               'Authorization' : API_KEY_AUTHORIZATION
-            },
-        }).then(response => response.json());
-
-        if(loginResponse.status === 'Success')
-        yield put({type : ActionConstants.GET_LOGIN_SUCCESS, isError : false});
-        
-    }catch(err){
-        yield put({type : ActionConstants.GET_LOGIN_FAILURE, isError : true})
+        yield put({ type : ActionConstants.LOAD_WEATHER_FAILURE, payload : err});
     }
 }
+
 /*
 function for watching all the Actions dispatches
 */
 function* sagasActionWatchers() {
-     yield takeLatest(ActionConstants.GET_PROJECT_DETAILS, fetchProjectDetails)
-     yield takeLatest(ActionConstants.GET_SEARCH_PROJECT_DETAILS, fetchSearchProjectDetails)
-     yield takeLatest(ActionConstants.GET_LOGIN, getLoginDetails)
+     yield takeLatest(ActionConstants.LOAD_WEATHER_LIST, loadWeatherDetails)
+     yield takeLatest(ActionConstants.GET_WEATHER_DETAILS_BY_LOCATION, getWeatherDetailsByLocation)
 }
 
 export default function* rootSaga() {
